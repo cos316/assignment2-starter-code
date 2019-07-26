@@ -47,6 +47,7 @@ func (*HttpRouter) ServeHTTP(response http.ResponseWriter, request *http.Request
 ```
 
 ## Additional Specifications
+
 Be sure that your implementation of the basic API above takes the following into account:
 * Your router must support arbitrary paths and HTTP methods, not just those
   required by the microblog client discussed below. You need not (and should not)
