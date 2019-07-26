@@ -101,15 +101,14 @@ func feed(app *app) {
 
 	fmt.Println(response.Status)
 	fmt.Printf("==============================\n\n")
-	var body [](map[string](map[string]interface{}))
+	var body []map[string]interface{}
 	err = json.NewDecoder(response.Body).Decode(&body)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 	for _, thread := range body {
-		msg := thread["message"]
-		fmt.Printf("(%d) @%s: \n\t%s\n\n",
-			int(msg["id"].(float64)), msg["author"], msg["body"])
+		msg := thread["message"].(map[string]interface{})
+		fmt.Printf("(%s) @%s: \n\t%s\n\n", thread["id"], msg["author"], msg["body"])
 	}
 }
