@@ -38,11 +38,11 @@ func NewRouter() *HttpRouter
 // the value of the second directory.
 //
 // A request of the form "GET /users/cesar/recent HTTP/1.1" will call the
-// RecentUserPosts with an `http.Request` with a `RawQuery = "user=cesar"`
+// RecentUserPosts with an `http.Request` with a `URL.RawQuery = "user=cesar"`
 //
 func (*HttpRouter) AddRoute(method string, pattern string, handler http.HandlerFunc)
 
-// Conforms to the `http.HandlerHttp` interface
+// Conforms to the `http.Handler` interface
 func (*HttpRouter) ServeHTTP(response http.ResponseWriter, request *http.Request)
 ```
 
@@ -53,11 +53,9 @@ Be sure that your implementation of the basic API above takes the following into
   required by the microblog client discussed below. You need not (and should not)
   validate that a client-provided method is part of the [official HTTP spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods#Specifications).
 * HTTP Methods are case-insensitive, whereas paths are case-sensitive. That is,
-  `GET` and `get` are equivalent, but `/path/to/file` and `Path/To/File` are not.
-* Paths should be indifferent to leading and trailing slashes. `/path/` and `path`
-  are equivalent.
+  `GET` and `get` are equivalent, but `/path/to/file` and `/Path/To/File` are not.
 * If (and only if) the request provided to `ServeHTTP` has no associated route,
-  your router must write an HTTP "404 Not Found" error to the response. Any response
+  your router must write an HTTP "404 Not Found" error as its response. Any response
   with a `Status` field equal to 404 will do.
   You may find Go's [http package](https://golang.org/pkg/net/http/) useful.
 * Calling `AddRoute` with a `method`, `pattern` pair that are already associated
@@ -68,6 +66,7 @@ Be sure that your implementation of the basic API above takes the following into
   is valid, but `/path/to/:file1:file2` is not.
 * A capture must always comprise the entire directory in which it appears. It is
   *not valid* to "prefix" captures, such as in `/path/to/user:id/photos`.
+* The same query parameter can be used to capture several values, as in `/path/to/:file/:file`. In this case, the http Response should have a `URL.RawQuery` of `file=<value>&file=<value>`. The order of values does not matter.
 
 Be aware of the following notable edge case:
 * It may be the case that there are several routes which could apply to a given
@@ -86,7 +85,7 @@ API. The application is a simple microblogging application (similar to
 Twitter).
 
 It uses an in-memory database to store users, threads, and messages, and
-presents a JSON-based REST API for listing recents threads from a particular
+presents a JSON-based REST API for listing recent threads from a particular
 user or all users the requesting user follows, posting new threads, responding
 to threads, and creating new users.
 
