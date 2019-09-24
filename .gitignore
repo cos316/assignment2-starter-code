@@ -1,0 +1,4 @@
+# Ignore executables
+*.exe
+client
+server
