@@ -12,10 +12,10 @@ on patterns in end-user requests.
 Before you begin working on this assignment, you will need to set up your
 development environment for assignment 2.
 
-0.  `git clone` your team-specific assignment 2 repository from the GitHub
+1.  `git clone` your team-specific assignment 2 repository from the GitHub
     classroom into whichever local directory you are using to store your
     assignment files. (See the A0 readme for more detailed instructions).
-0.  Add the directory containing this cloned repository as a synced folder
+1.  Add the directory containing this cloned repository as a synced folder
     to your Vagrant VM, by editing and uncommenting the appropriate line in
     your `Vagrantfile`.
 
