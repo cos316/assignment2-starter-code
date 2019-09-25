@@ -1,11 +1,11 @@
+# COS316, Assignment 1: HTTP Routing Framework
+
+## Due: October 8 at 23:00
+
 # HTTP Routing Framework
 
-Due [Date TBD] at [Time TBD]
+As discussed in lecture, naming schemes are central to system design.  In this project, you'll build a general library, called an HTTP router,  to help structure web applications based on patterns in end-user requests.  This general library will support a naming scheme for accessing resources provided by a web application.
 
-In this project, you'll build a library to help structure web applications based
-on patterns in end-user requests.
-
-***TODO: Relation to lecture material (i.e. naming)***
 
 ## Getting Started
 
@@ -14,7 +14,7 @@ development environment for assignment 2.
 
 1.  `git clone` your team-specific assignment 2 repository from the GitHub
     classroom into whichever local directory you are using to store your
-    assignment files. (See the A0 readme for more detailed instructions).
+    assignment files. (See the the Assignment 1 readme for more detailed instructions).
 1.  Add the directory containing this cloned repository as a synced folder
     to your Vagrant VM, by editing and uncommenting the appropriate line in
     your `Vagrantfile`.
