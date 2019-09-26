@@ -1,4 +1,4 @@
-# COS316, Assignment 1: HTTP Routing Framework
+# COS316, Assignment 2: HTTP Routing Framework
 
 ## Due: October 8 at 23:00
 
