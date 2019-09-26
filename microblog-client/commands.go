@@ -37,8 +37,8 @@ func follow(app *app) {
 
 	fmt.Println(response.Status)
 	defer response.Body.Close()
-	var body map[string]interface{}
-	json.NewDecoder(response.Body).Decode(body)
+	var body []interface{}
+	err = json.NewDecoder(response.Body).Decode(&body)
 	fmt.Println(body)
 }
 
@@ -77,10 +77,87 @@ func userFeed(app *app) {
 	}
 
 	fmt.Println(response.Status)
-	defer response.Body.Close()
-	var body map[string]interface{}
-	json.NewDecoder(response.Body).Decode(body)
-	fmt.Println(body)
+	fmt.Printf("==============================\n\n")
+	var body []map[string]interface{}
+	err = json.NewDecoder(response.Body).Decode(&body)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	for _, thread := range body {
+		msg := thread["message"].(map[string]interface{})
+		fmt.Printf("(%s): \n\t%s\n\n", thread["id"], msg["body"])
+	}
+}
+
+func getThread(app *app) {
+	console := bufio.NewScanner(os.Stdin)
+	fmt.Printf("Which thread do you want to read (0,1,2,...)? ")
+	console.Scan()
+	threadId := console.Text()
+	url := fmt.Sprintf("http://localhost:8080/threads/%s", threadId)
+
+	request, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	client := &http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	fmt.Println(response.Status)
+	fmt.Printf("==============================\n\n")
+	var thread map[string]interface{}
+	err = json.NewDecoder(response.Body).Decode(&thread)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	msg := thread["message"].(map[string]interface{})
+	fmt.Printf("(%s): \n\t%s\n\n", thread["id"], msg["body"])
+	responses := thread["responses"].([]interface{})
+	for _, response := range responses {
+		r := response.(map[string]interface{})
+		fmt.Printf("\t\t@%s: %s\n\n", r["author"], r["body"])
+	}
+}
+
+func respondThread(app *app) {
+	console := bufio.NewScanner(os.Stdin)
+	fmt.Printf("Which thread do you want to read (0,1,2,...)? ")
+	console.Scan()
+	threadId := console.Text()
+
+	fmt.Printf("What's your response? ")
+	console.Scan()
+	message := console.Text()
+
+	response, err := postForm(app, fmt.Sprintf("threads/%s", threadId), url.Values{"body": {message}}, true)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	fmt.Println(response.Status)
+	fmt.Printf("==============================\n\n")
+	var thread map[string]interface{}
+	err = json.NewDecoder(response.Body).Decode(&thread)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	msg := thread["message"].(map[string]interface{})
+	fmt.Printf("(%s): \n\t%s\n\n", thread["id"], msg["body"])
+	responses := thread["responses"].([]interface{})
+	for _, response := range responses {
+		r := response.(map[string]interface{})
+		fmt.Printf("\t\t@%s: %s\n\n", r["author"], r["body"])
+	}
 }
 
 func feed(app *app) {

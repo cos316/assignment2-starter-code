@@ -10,13 +10,13 @@ type Message struct {
 type Thread struct {
 	ID        string    `json:"id"`
 	Message   Message   `json:"message"`
-	Responses []Message `json:"responses"`
+	Responses []*Message `json:"responses"`
 }
 
 type User struct {
 	Username  string `json:"username"`
 	following []string
-	threads   []Thread
+	threads   []*Thread
 }
 
-var DB map[string]User = make(map[string]User)
+var DB map[string]*User = make(map[string]*User)

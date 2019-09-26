@@ -12,6 +12,10 @@ func main() {
 		newCommand("Create a new user", newUser)
 	app.commands["recent"] =
 		newCommand("List the user's recent posts", userFeed)
+	app.commands["thread"] =
+		newCommand("List thread and responses", getThread)
+	app.commands["respond"] =
+		newCommand("Respond to a thread", respondThread)
 	app.commands["follow"] =
 		newCommand("Follow a user from the requesting user", follow)
 	app.commands["post"] =

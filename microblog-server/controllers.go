@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 )
@@ -84,16 +83,15 @@ func PostToFeed(response http.ResponseWriter, request *http.Request) {
 		values := request.Form
 		threadID := strconv.FormatInt(GlobalCounter, 10)
 		GlobalCounter++
-		thread := Thread{
+		thread := &Thread{
 			ID: threadID,
 			Message: Message{
 				Body:   values.Get("body"),
 				Author: callingUser,
 			},
-			Responses: []Message{},
+			Responses: []*Message{},
 		}
-		user.threads = append([]Thread{thread}, user.threads...)
-		DB[callingUser] = user
+		user.threads = append([]*Thread{thread}, user.threads...)
 		js, _ := json.Marshal(thread)
 		response.Header().Set("Content-Type", "application/json")
 		response.Write(js)
@@ -101,8 +99,38 @@ func PostToFeed(response http.ResponseWriter, request *http.Request) {
 		http.Error(response, "Not authorized", http.StatusInternalServerError)
 		return
 	}
-
 }
+
+func RespondToThread(response http.ResponseWriter, request *http.Request) {
+	callingUser, _, ok := request.BasicAuth()
+	if !ok {
+		callingUser = "temp"
+	}
+
+	if _, ok := DB[callingUser]; ok {
+		threadID := request.URL.Query().Get("thread")
+		request.ParseForm()
+		for _, user := range DB {
+			for _, thread := range user.threads {
+				if thread.ID == threadID {
+					values := request.Form
+					message := &Message {
+						Author: callingUser,
+						Body: values.Get("body"),
+					}
+					thread.Responses = append(thread.Responses, message)
+					js, _ := json.Marshal(thread)
+					response.Header().Set("Content-Type", "application/json")
+					response.Write(js)
+					return
+				}
+			}
+		}
+	} else {
+		http.Error(response, "Not authorized", http.StatusInternalServerError)
+	}
+}
+
 
 func ThreadResponses(response http.ResponseWriter, request *http.Request) {
 	threadID := request.URL.Query().Get("thread")
@@ -123,9 +151,9 @@ func NewUser(response http.ResponseWriter, request *http.Request) {
 	values := request.Form
 	username := values.Get("username")
 	if _, ok := DB[username]; !ok {
-		user := User{
+		user := &User{
 			Username:  username,
-			threads:   []Thread{},
+			threads:   []*Thread{},
 			following: []string{},
 		}
 		DB[username] = user
@@ -135,6 +163,25 @@ func NewUser(response http.ResponseWriter, request *http.Request) {
 	}
 }
 
-func FooHandler(response http.ResponseWriter, request *http.Request) {
-	fmt.Fprintf(response, "Bar")
+func FollowUser(response http.ResponseWriter, request *http.Request) {
+	userToFollow := request.URL.Query().Get("user")
+
+	callingUser, _, ok := request.BasicAuth()
+	if !ok {
+		callingUser = "temp"
+	}
+
+	user, ok := DB[callingUser]
+	if ok {
+		if _, followOk := DB[userToFollow]; followOk {
+			user.following = append(user.following, userToFollow)
+			js, _ := json.Marshal(user.following)
+			response.Header().Set("Content-Type", "application/json")
+			response.Write(js)
+		} else {
+			http.Error(response, "User not found", http.StatusNotFound)
+		}
+	} else {
+		http.Error(response, "Not authorized", http.StatusInternalServerError)
+	}
 }

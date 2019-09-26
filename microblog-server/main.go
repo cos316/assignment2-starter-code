@@ -34,33 +34,33 @@ func (handler *serializedHandler) ServeHTTP(response http.ResponseWriter, reques
 
 func main() {
 	// initlaize database (DB) with some users and users' data
-	DB["amit"] = User{
+	DB["amit"] = &User{
 		Username:  "amit",
 		following: []string{"will", "kap"},
-		threads:   []Thread{},
+		threads:   []*Thread{},
 	}
 
-	DB["will"] = User{
+	DB["will"] = &User{
 		Username:  "will",
 		following: []string{},
-		threads: []Thread{
-			Thread{
+		threads: []*Thread{
+			&Thread{
 				ID:        "0",
 				Message:   Message{Body: "Hello World", Author: "will"},
-				Responses: []Message{},
+				Responses: []*Message{},
 			},
 		},
 	}
 
-	DB["kap"] = User{
+	DB["kap"] = &User{
 		Username:  "kap",
 		following: []string{},
-		threads: []Thread{
-			Thread{
+		threads: []*Thread{
+			&Thread{
 				ID:      "1",
 				Message: Message{Body: "This is a funny little message", Author: "kap"},
-				Responses: []Message{
-					Message{
+				Responses: []*Message{
+					&Message{
 						Body:   "Interesting...",
 						Author: "amit",
 					},
@@ -88,10 +88,10 @@ func main() {
 	router := http_router.NewRouter()
 	router.AddRoute("GET", "/feed", GetFeed)
 	router.AddRoute("POST", "/feed", PostToFeed)
-	router.AddRoute("POST", "/threads/:thread", FooHandler) // TODO
+	router.AddRoute("POST", "/threads/:thread", RespondToThread)
 	router.AddRoute("GET", "/threads/:thread", ThreadResponses)
 	router.AddRoute("GET", "/users/:user/recent", GetUserFeed)
-	router.AddRoute("POST", "/users/:user/follow", FooHandler) // TODO
+	router.AddRoute("POST", "/users/:user/follow", FollowUser)
 	router.AddRoute("POST", "/users/new", NewUser)
 
 	// set up the custom handler
