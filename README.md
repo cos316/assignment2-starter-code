@@ -124,6 +124,19 @@ Be aware of the following notable edge case:
   the first and second capture, and so on. If you like, you may informally think
   of this as finding the route which "waits the longest" before capturing each
   of its values.
+  
+## Performance
+
+A small portion of your grade on this assignment will depend upon your router's 
+performance when it contains a large number of routes. For full credit, you should
+aim to make your implementation as quick as possible in these cases. 
+
+In particular, if you must iterate over every route in the router to find a matching 
+route, your solution will be too slow to earn points for performance. 
+
+Note that the number of points associated with performance is *quite small*, and 
+accordingly **you can earn close to full credit** without considering efficiency
+at all. 
 
 ## Unit Testing
 
