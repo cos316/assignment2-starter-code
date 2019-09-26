@@ -1,3 +1,7 @@
+// microblog-server on localhost:8080
+//
+// Useage: microblog-server
+
 package main
 
 import (
@@ -7,23 +11,29 @@ import (
 	"../http_router"
 )
 
+// define struct to store the HTTP request and header
 type handlerState struct {
 	request *http.Request
 	writer  http.ResponseWriter
 }
 
+// we want to serialize requests, so define a struct to 
+// for sending handlerState struct
 type serializedHandler struct {
 	c    chan handlerState
 	done chan bool
 }
 
+
+// define a ServeHTTP method for the serializeHandler
+// we can use this to define a customer handler for ListenAndServe
 func (handler *serializedHandler) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 	handler.c <- handlerState{request: request, writer: response}
 	<-handler.done
 }
 
 func main() {
-
+	// initlaize database (DB) with some users and users' data
 	DB["amit"] = User{
 		Username:  "amit",
 		following: []string{"will", "kap"},
@@ -73,6 +83,8 @@ func main() {
 		POST /users/new
 	*/
 
+	// create a new router (from the general libary)
+	// add the routes (names) we want to support
 	router := http_router.NewRouter()
 	router.AddRoute("GET", "/feed", GetFeed)
 	router.AddRoute("POST", "/feed", PostToFeed)
@@ -82,10 +94,12 @@ func main() {
 	router.AddRoute("POST", "/users/:user/follow", FooHandler) // TODO
 	router.AddRoute("POST", "/users/new", NewUser)
 
+	// set up the custom handler
 	handler := &serializedHandler{}
 	handler.c = make(chan handlerState)
 	handler.done = make(chan bool)
 
+	// Use a go routine wait to serve HTTP requests
 	go func() {
 		for {
 			state := <-handler.c
@@ -94,6 +108,7 @@ func main() {
 		}
 	}()
 
+	// listening on localhost:8080
 	err := http.ListenAndServe(":8080", handler)
 	if err != nil {
 		log.Fatalf("Error listening for connections: %s", err)
