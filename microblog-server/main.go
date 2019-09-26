@@ -28,8 +28,9 @@ type serializedHandler struct {
 // define a ServeHTTP method for the serializeHandler
 // we can use this to define a customer handler for ListenAndServe
 func (handler *serializedHandler) ServeHTTP(response http.ResponseWriter, request *http.Request) {
-	handler.c <- handlerState{request: request, writer: response}
-	<-handler.done
+	// ListenAndServe will call this function when a client makes an HTTP request
+	handler.c <- handlerState{request: request, writer: response}  // send request and writer to handler channel
+	<-handler.done                                                 // block until done
 }
 
 func main() {
@@ -102,9 +103,9 @@ func main() {
 	// Use a go routine wait to serve HTTP requests
 	go func() {
 		for {
-			state := <-handler.c
-			router.ServeHTTP(state.writer, state.request)
-			handler.done <- true
+			state := <-handler.c                           // send data to state channel
+			router.ServeHTTP(state.writer, state.request)  // handle the route
+			handler.done <- true                           // signal done to channel
 		}
 	}()
 
