@@ -4,7 +4,7 @@
 
 # HTTP Routing Framework
 
-As discussed in lecture, naming schemes are central to system design.  In this project, you'll build a general library, called an HTTP router,  to help structure web applications based on patterns in end-user requests.  This general library will support a naming scheme for accessing resources provided by a web application.
+As discussed in lecture, naming schemes are central to system design.  In this project, you'll build a general library, called an HTTP Routing Framework,  to help structure web applications based on patterns in end-user requests.  This general library will support a naming scheme for client accessing resources provided by a web application.
 
 
 ## Getting Started
@@ -174,7 +174,10 @@ cases or debug unexpected results.
 ## Sample Application
 
 The assignment starter code includes a sample application that uses the routing
-API. You may use this sample application as another tool to test your router
+API. Before starting the assignment, your partner and you may want to review this
+application source.  Understanding this application, and its specific routes, may 
+help you design the HTTP Routing Framework library.  You may also use this sample 
+application as another tool to test your router
 implementation if you desire, but it will not factor into grading in any way.
 
 The application is a simple microblogging application (similar to Twitter).
@@ -237,6 +240,5 @@ suite when run against your code. **Note that you will be graded only on your
 changes to the `http_router` package**, and not on your changes to any other files,
 though you may modify any files you wish.
 
-You may submit and receive feedback in this way as many times as you like,
-whenever you like, but a substantial lateness penalty will be applied to
-submissions past the deadline.
+You may submit and receive feedback in this way as many times as you like and 
+whenever you like.
