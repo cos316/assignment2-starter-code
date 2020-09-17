@@ -1,10 +1,10 @@
 # COS316, Assignment 2: HTTP Routing Framework
 
-## Due: October 8 at 23:00
+## Due: September 30 at 23:00
 
 # HTTP Routing Framework
 
-As discussed in lecture, naming schemes are central to system design.  In this project, you'll build a general library, called an HTTP Routing Framework,  to help structure web applications based on patterns in end-user requests.  This general library will support a naming scheme for client accessing resources provided by a web application.
+As discussed in lecture, naming schemes are central to system design.  In this project, you'll build a general library, called an HTTP Routing Framework,  to help structure web applications based on patterns in end-user requests.  This general library will support a naming scheme for clients accessing resources provided by a web application.
 
 
 ## Getting Started
