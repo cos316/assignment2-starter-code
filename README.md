@@ -4,23 +4,21 @@
 
 # HTTP Routing Framework
 
-As discussed in lecture, naming schemes are central to system design.  In this project, you'll build a general library, called an HTTP Routing Framework,  to help structure web applications based on patterns in end-user requests.  This general library will support a naming scheme for clients accessing resources provided by a web application.
-
+As discussed in lecture, naming schemes are central to system design. 
+In this project, you'll build a general library, called an HTTP Routing Framework, 
+to help structure web applications based on patterns in end-user requests. 
+This general library will support a naming scheme for clients accessing resources 
+provided by a web application.
 
 ## Getting Started
 
 Before you begin working on this assignment, you will need to set up your
-development environment for assignment 2.
+development environment.
 
-1.  `git clone` your team-specific assignment 2 repository from the GitHub
-    classroom into whichever local directory you are using to store your
-    assignment files. (See the the Assignment 1 readme for more detailed instructions).
-1.  Add the directory containing this cloned repository as a synced folder
-    to your Vagrant VM, by editing and uncommenting the appropriate line in
-    your `Vagrantfile`.
-
-    Refer to the [GitHub classroom README](https://github.com/cos316/COS316-Public/blob/master/assignments/GITHUB.md)
-    for more detailed instructions.
+Namely, `git clone` your assignment 2 repository (unique to you and your partner) 
+from GitHub into whichever local directory you are using to store your
+assignment files. (See the *General Assignment Instructions* section toward the bottom
+of [this page](https://cos316.princeton.edu/assignments) for more detailed instructions).
 
 ## API
 
@@ -40,19 +38,19 @@ func NewRouter() *HttpRouter
 // `handler`.
 //
 // `method`: should support arbitrary method strings, and least each of "POST",
-//           "GET", "PUT", "DELETE". Method strings are case insensitive
+//           "GET", "PUT", "DELETE". Method strings are case insensitive.
 //
 // `pattern`: patterns on the request _path_. Patterns can include arbitrary
 //           "directories". Directories can include "captures" of the form
 //           `:variable_name` that capture the actual directory value into a
 //            HTTP query paramter. Leading and trailing '/' (slash) characters
-//            are ignored
+//            are ignored.
 //
 // Example:
 //
-// AddRoute("GET", "/users/:user/recent", RecentUserPosts)
+//   AddRoute("GET", "/users/:user/recent", RecentUserPosts)
 //
-// Should map all GET requests with a path of the form "/users/*/recent" to the
+// should map all GET requests with a path of the form "/users/*/recent" to the
 // `RecentUserPosts` handler. It should populate the query parameter "user" with
 // the value of the second directory.
 //
@@ -67,7 +65,7 @@ func (*HttpRouter) ServeHTTP(response http.ResponseWriter, request *http.Request
 
 ## Additional Specifications
 
-Be sure that your implementation of the basic API above takes the following into account:
+Be sure that your implementation of the above basic API takes the following into account:
 
 * Your router must support arbitrary paths and HTTP methods, not just those
   required by the microblog client discussed below. You need not (and should not)
@@ -101,10 +99,10 @@ Be sure that your implementation of the basic API above takes the following into
   (e.g. `/path//file`). You may assume your code will never encounter these cases.
 
 * A pattern may include a capture for several values using the same name, as in
-  `/path/to/:file/:file`. In this case, the http Response should have a   `URL.RawQuery` of `file=<value>&file=<value>`.
-  We impose no restrictions on the order in which key-value pairs appear, except
-  that the values for a particular key must appear in the same order as they did
-  in the request path.
+  `/path/to/:file/:file`. In this case, the http Response should have a 
+  `URL.RawQuery` of `file=<value>&file=<value>`. We impose no restrictions on the 
+  order in which key-value pairs appear, except that the values for a particular 
+  key must appear in the same order as they did in the request path.
   You may (or may not) find Go's [url package](https://golang.org/pkg/net/url/)
   useful, particularly the [Values type](https://golang.org/pkg/net/url/#Values).
 
@@ -159,14 +157,13 @@ For example, run the following from your top-level assignment 2 directory:
 ```bash
 $ go test -v ./http_router
 ```
-
 Equivalently, you may `cd` into the http_router directory and run the following:
 ```bash
 $ go test -v
 ```
 
 You will not be graded directly on the quality of your unit tests for this
-assignment, but good unit tests will help you to debug and understand your
+assignment, but good unit tests will help you debug and understand your
 program. We **highly** recommend writing *at least* three or four simple unit tests,
 both to familiarize yourself with the API, and to help identify tricky corner
 cases or debug unexpected results.
@@ -175,10 +172,10 @@ cases or debug unexpected results.
 
 The assignment starter code includes a sample application that uses the routing
 API. Before starting the assignment, your partner and you may want to review this
-application source.  Understanding this application, and its specific routes, may 
-help you design the HTTP Routing Framework library.  You may also use this sample 
-application as another tool to test your router
-implementation if you desire, but it will not factor into grading in any way.
+application source. Understanding this application, and its specific routes, may 
+help you design the HTTP Routing Framework library. You may also use this sample 
+application as another tool to test your router implementation if you desire, 
+but it will not factor into grading in any way.
 
 The application is a simple microblogging application (similar to Twitter).
 It uses an in-memory database to store users, threads, and messages, and
@@ -190,6 +187,7 @@ to threads, and creating new users.
 
 The microblog client and server application can both be compiled using Go's
 `go build` command. For example:
+
 ```bash
 go build -o client ./microblog-client
 go build -o server ./microblog-server
@@ -198,11 +196,11 @@ go build -o server ./microblog-server
 We have provided a simple Makefile that includes the two commands above.
 Feel free to modify the Makefile if you find it convenient.
 
-To build the client and server programs, you can simply run the `make` command
+To build the client and server programs, you can simply run the `make` command,
 and the `make` utility will generate two executables, named `client` and `server`.
 
 Once you have built the executables, run each one in a separate terminal window,
-in the same way you ran your client and server programs from assignment 1.
+in the same way you ran your client and server programs from assignment 1:
 
 ```bash
 $ ./server
@@ -227,14 +225,14 @@ features.
 
 ### Using the application
 
-The application uses HTTP basic authentication
+The application uses HTTP basic authentication.
 
 You can exercise the application using a few simple `curl` commands.
 
 ## Submission & Grading
 
 Your assignment will be automatically submitted every time you push your changes
-to your GitHub Classroom repo. Within a couple minutes of your submission, the
+to your GitHub repository. Within a couple minutes of your submission, the
 autograder will make a comment on your commit listing the output of our testing
 suite when run against your code. **Note that you will be graded only on your
 changes to the `http_router` package**, and not on your changes to any other files,
