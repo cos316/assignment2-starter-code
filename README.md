@@ -204,7 +204,9 @@ in the same way you ran your client and server programs from assignment 1:
 
 ```bash
 $ ./server
-$ ./client recent -user kap
+```
+```bash
+$ ./client -user kap user
 ```
 
 If you like, you may also run both programs in the same terminal window by
@@ -212,7 +214,7 @@ running the server in the background:
 
 ```bash
 $ ./server &
-$ ./client recent -user kap
+$ ./client -user kap recent
 ```
 
 Note that, unlike the client from assignment 1, this client accepts commands
