@@ -43,7 +43,7 @@ func NewRouter() *HttpRouter
 // `pattern`: patterns on the request _path_. Patterns can include arbitrary
 //           "directories". Directories can include "captures" of the form
 //           `:variable_name` that capture the actual directory value into a
-//            HTTP query paramter. Leading and trailing '/' (slash) characters
+//            HTTP query parameter. Leading and trailing '/' (slash) characters
 //            are ignored.
 //
 // Example:
